@@ -42,7 +42,7 @@ public class FondestMemories implements ModInitializer {
     @Override
     public void onInitialize() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            ServerLevel level = server.getLevel(FondestMemoriesDimensionRegistry.ROAD_DIM);
+            ServerLevel level = server.getLevel(FondestMemoriesDimensionRegistry.ENDLESS_HIGHWAY);
             if (level != null) generator.tick(level);
         });
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> generator.reset());

@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
 public class FondestMemoriesDimensionRegistry {
-    public static final ResourceKey<Level> ROAD_DIM = ResourceKey.create(
+    public static final ResourceKey<Level> ENDLESS_HIGHWAY = ResourceKey.create(
             Registries.DIMENSION, FondestMemories.id("endless_highway"));
 
     /*public static final ResourceKey<Level> THALASSOPHOBIA = ResourceKey.create(
