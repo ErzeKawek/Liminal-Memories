@@ -18,6 +18,8 @@ public class ModelProv extends FabricModelProvider {
         blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.REAL_GATE);
         blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.FALSE_GATE);
         blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.POOL_TILING);
+        blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.HIGHWAY_RIFT);
+        blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.POOL_RIFT);
 
         generateTileModels(blockModelGenerator, FondestMemoriesBlockRegistry.POOL_TILE);
     }
