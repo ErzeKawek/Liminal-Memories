@@ -21,7 +21,7 @@ public final class GroupRuntime {
         for (RoomGroup.RoomDef def : g.singles) {
             LoadedRoom lr = LoadedRoom.load(def, cellSize, g.singleGuide);
             if (lr == null || lr.openMask == 0) continue;
-            FondestMemories.LOGGER.info("[mazegen] single {} -> {}", def.nbt(), shapeName(lr.openMask));
+            FondestMemories.LOGGER.info("[Fondest Memories] single {} -> {}", def.nbt(), shapeName(lr.openMask));
 
             Map<Integer, List<Integer>> rotsPerMask = new HashMap<>();
             for (int k = 0; k < 4; k++)

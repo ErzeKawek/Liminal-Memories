@@ -29,8 +29,8 @@ public class FondestMemories implements ModInitializer {
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
 
-    public static Identifier findRoom(String name) {
-        return id("pools/" + name);
+    public static Identifier findRoom(String space, String name) {
+        return id(space + "/" + name);
     }
 
     private static volatile MinecraftServer server;
@@ -48,12 +48,12 @@ public class FondestMemories implements ModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> generator.reset());
         Registry.register(BuiltInRegistries.CHUNK_GENERATOR, id("maze"), MazeChunkGenerator.CODEC);
 
-        FondestMemoriesRoomRegistry.registerPoolrooms(); // <-- your room registrations live here
-
         ServerLifecycleEvents.SERVER_STARTING.register(s -> server = s);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((s, rm, ok) -> clearCaches());
         ServerLifecycleEvents.SERVER_STOPPED.register(s -> { server = null; clearCaches(); });
 
+        FondestMemoriesRoomRegistry.registerPoolrooms();
+        // FondestMemoriesRoomRegistry.registerHotel();
         FondestMemoriesBlockRegistry.initialize();
         FondestMemoriesItemRegistry.initialize();
         FondestMemoriesItemGroup.initialize();

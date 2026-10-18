@@ -156,7 +156,7 @@ public class RoadGenerator {
             if (p.weight() <= 0) continue;
             var opt = manager.get(FondestMemories.id(p.id()));
             if (opt.isEmpty()) {
-                System.err.println("fondest_memories missing structure: " + p.id());
+                System.err.println("yo ts missing: " + p.id());
                 continue;
             }
             templates.add(opt.get());

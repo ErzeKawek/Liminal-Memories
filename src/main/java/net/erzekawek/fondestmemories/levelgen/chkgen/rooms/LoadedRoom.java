@@ -20,7 +20,6 @@ import java.util.*;
 
 /** A room NBT parsed into flat arrays, guide blocks stripped and converted to {@link Port}s. */
 public final class LoadedRoom {
-    private static final Logger LOG = LoggerFactory.getLogger("mazegen");
 
     public final RoomGroup.RoomDef def;
     public final int sx, sy, sz, cellsW, cellsD;
@@ -95,17 +94,21 @@ public final class LoadedRoom {
     /** Loads + parses the NBT. Returns null when it can't be found. */
     static LoadedRoom load(RoomGroup.RoomDef def, int cellSize, Block guide) {
         MinecraftServer server = FondestMemories.server();
-        if (server == null) { LOG.error("[mazegen] server not ready while loading {}", def.nbt()); return null; }
+        if (server == null) {
+            FondestMemories.LOGGER.error("[Fondest Memories] server not ready while loading {}", def.nbt()); return null;
+        }
 
         Optional<StructureTemplate> opt = server.getStructureTemplateManager().get(def.nbt());
-        if (opt.isEmpty()) { LOG.error("[mazegen] missing structure NBT: {}", def.nbt()); return null; }
+        if (opt.isEmpty()) {
+            FondestMemories.LOGGER.error("[Fondest Memories] missing structure NBT: {}", def.nbt()); return null;
+        }
 
         CompoundTag tag = opt.get().save(new CompoundTag());
         ListTag size = tag.getListOrEmpty("size");
         int sx = size.getIntOr(0, 0), sy = size.getIntOr(1, 0), sz = size.getIntOr(2, 0);
 
         if (sx != def.cellsX() * cellSize || sz != def.cellsZ() * cellSize) {
-            LOG.warn("[mazegen] {} is {}x{} blocks but {}x{} cells of {} = {}x{}; check the NBT or cell_size",
+            FondestMemories.LOGGER.warn("[Fondest Memories] {} is {}x{} blocks but {}x{} cells of {} = {}x{}; check the NBT or cell_size",
                     def.nbt(), sx, sz, def.cellsX(), def.cellsZ(), cellSize,
                     def.cellsX() * cellSize, def.cellsZ() * cellSize);
         }
@@ -152,7 +155,7 @@ public final class LoadedRoom {
         LoadedRoom room = new LoadedRoom(def, sx, sy, sz,
                 Arrays.copyOf(xs, count), Arrays.copyOf(ys, count), Arrays.copyOf(zs, count),
                 Arrays.copyOf(st, count), Arrays.copyOf(nb, count), List.copyOf(portSet));
-        if (portSet.isEmpty()) LOG.warn("[mazegen] {} has no guide blocks ({}), it will never connect", def.nbt(), guide);
+        if (portSet.isEmpty()) FondestMemories.LOGGER.warn("[Fondest Memories] {} has no guide blocks ({}), it will never connect", def.nbt(), guide);
         return room;
     }
 }

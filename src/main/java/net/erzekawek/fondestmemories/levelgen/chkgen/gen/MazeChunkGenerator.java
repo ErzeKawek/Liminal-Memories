@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-/** Chunk generator that pastes the maze pieces overlapping each chunk. Stateless apart from caches -> endless. */
+/** Generates mazes */
 public final class MazeChunkGenerator extends ChunkGenerator {
 
     public static final MapCodec<MazeChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
@@ -68,7 +68,7 @@ public final class MazeChunkGenerator extends ChunkGenerator {
         return CompletableFuture.completedFuture(chunk);
     }
 
-    /** All of the actual maze logic. */
+    /** the maze logic */
     public void generateMaze(ChunkAccess chunk) {
         ChunkPos cp = chunk.getPos();
         int minX = cp.getMinBlockX(), minZ = cp.getMinBlockZ(), maxX = minX + 15, maxZ = minZ + 15;

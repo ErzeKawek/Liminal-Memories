@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "fondest_memories:block/sky_window" }
+    "": {
+      "model": "fondest_memories:block/sky_window"
+    }
   }
 }

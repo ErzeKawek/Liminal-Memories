@@ -2,6 +2,7 @@ package net.erzekawek.fondestmemories.registry;
 
 import net.erzekawek.fondestmemories.FondestMemories;
 import net.erzekawek.fondestmemories.levelgen.chkgen.rooms.RoomGroup;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 
 /**
@@ -31,5 +32,13 @@ public final class FondestMemoriesRoomRegistry {
                 // de starting room
                 .start(FondestMemories.id("pools/pool_24x24_entrance"),3, 3, -8)
                 .register();
+    }
+
+    public static void registerHotel() {
+
+    }
+
+    public static Identifier findPool(String roomId) {
+        return FondestMemories.findRoom("pools", roomId);
     }
 }

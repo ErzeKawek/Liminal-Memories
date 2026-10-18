@@ -4,7 +4,10 @@
   "version": "${version}",
   "name": "Fondest Memories",
   "description": "A Library for generating data-driven worldgen.",
-  "authors": [],
+  "authors": [
+    "ErzeKawek (Lead Dev)",
+    "Rinnzenzh. (Artist)"
+  ],
   "contact": {},
   "license": "MIT",
   "icon": "assets/fondest_memories/icon.png",

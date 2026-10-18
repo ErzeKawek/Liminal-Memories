@@ -61,7 +61,7 @@ public final class MazeRegion {
     private MazeRegion build() {
         RoomGroup group = RoomGroup.get(s.group());
         if (group == null) {
-            FondestMemories.LOGGER.error("[mazegen] unknown room group {}", s.group()); return this;
+            FondestMemories.LOGGER.error("[Fondest Memories] unknown room group {}", s.group()); return this;
         }
         rt = group.runtime(cs);
         rng = RandomSource.create(mix(s.seed(), rx, rz, 7));
@@ -69,7 +69,7 @@ public final class MazeRegion {
         // start room
         if (rx == 0 && rz == 0 && rt.start != null) {
             int lx = (n - rt.start.cellsW) / 2, lz = (n - rt.start.cellsD) / 2;
-            if (!tryPlace(rt.start, 0, lx, lz)) FondestMemories.LOGGER.error("[mazegen] start room doesn't fit/ports blocked; raise region_size");
+            if (!tryPlace(rt.start, 0, lx, lz)) FondestMemories.LOGGER.error("[Fondest Memories] start room doesn't fit/ports blocked; raise region_size");
         }
 
         // 2) rand multi
@@ -97,7 +97,7 @@ public final class MazeRegion {
         while (!stack.isEmpty()) {
             int node = stack.peek();
             exits(node, exits);
-            exits.removeIf(e -> vis[nodeOf(e[2])]); // to make branch into only empty cells
+            exits.removeIf(e -> vis[nodeOf(e[2])]); // to make branch only to empty cells
             if (exits.isEmpty()) { stack.pop(); continue; }
             int[] e = exits.get(rng.nextInt(exits.size()));
             Side side = Side.VALUES[e[1]];
@@ -135,7 +135,7 @@ public final class MazeRegion {
             if (cells[i] != null || mask[i] == 0 || !vis[i]) continue;
             GroupRuntime.Candidate c = rt.pickSingle(mask[i], rng);
             if (c == null) {
-                FondestMemories.LOGGER.warn("[mazegen] no 1x1 piece with openings mask {}, leaving cell empty", mask[i]); continue;
+                FondestMemories.LOGGER.warn("[Fondest Memories] no 1x1 piece with openings mask {}, leaving cell empty", mask[i]); continue;
             }
             int lx = i % n, lz = i / n;
             cells[i] = new Placement(c.room(), c.rot(), lx, lz, -1, List.of(),
@@ -165,10 +165,10 @@ public final class MazeRegion {
         return true;
     }
 
-    /** graph node of a cell: the cell itself, or its room. */
+    /** cell nodes */
     private int nodeOf(int idx) { Placement p = cells[idx]; return p == null ? idx : n * n + p.index; }
 
-    /** Possible moves out of a node: {fromCell, sideOrdinal, toCell}. A room can only leave through its exits. */
+    /** Room exit rule */
     private void exits(int node, List<int[]> out) {
         out.clear();
         if (node < n * n) {
@@ -192,7 +192,6 @@ public final class MazeRegion {
     }
 
     private boolean gate(int gx, int gz, Side sd) {
-        // canonical key = lower cell of the edge + axis, identical from both sides
         int ax = gx, az = gz, axis;
         switch (sd) {
             case EAST -> axis = 0;

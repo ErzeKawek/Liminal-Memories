@@ -12,7 +12,7 @@ public enum Side {
     public Side opposite() { return VALUES[(ordinal() + 2) & 3]; }
     public Side cw() { return VALUES[(ordinal() + 1) & 3]; }
 
-    /** a 4-bit opening mask rotating clockwise k quarter turns. */
+    /** an opening mask rotating clockwise k quarter turns. */
     public static int rotateMask(int mask, int k) {
         int r = 0;
         for (Side s : VALUES) if ((mask & s.bit) != 0) r |= VALUES[(s.ordinal() + k) & 3].bit;

@@ -1,10 +1,22 @@
 {
   "variants": {
-    "facing=up":    { "model": "fondest_memories:block/sky_panel_noon" },
-    "facing=down":  { "model": "fondest_memories:block/sky_panel_noon" },
-    "facing=north": { "model": "fondest_memories:block/sky_panel_noon" },
-    "facing=south": { "model": "fondest_memories:block/sky_panel_noon" },
-    "facing=east":  { "model": "fondest_memories:block/sky_panel_noon" },
-    "facing=west":  { "model": "fondest_memories:block/sky_panel_noon" }
+    "facing=up":    {
+      "model": "fondest_memories:block/sky_panel_noon"
+    },
+    "facing=down":  {
+      "model": "fondest_memories:block/sky_panel_noon"
+    },
+    "facing=north": {
+      "model": "fondest_memories:block/sky_panel_noon"
+    },
+    "facing=south": {
+      "model": "fondest_memories:block/sky_panel_noon"
+    },
+    "facing=east":  {
+      "model": "fondest_memories:block/sky_panel_noon"
+    },
+    "facing=west":  {
+      "model": "fondest_memories:block/sky_panel_noon"
+    }
   }
 }
