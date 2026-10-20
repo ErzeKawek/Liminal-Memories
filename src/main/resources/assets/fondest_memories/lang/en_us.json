@@ -5,9 +5,15 @@
   "block.fondest_memories.pool_tile": "Pool Tiles",
   "block.fondest_memories.pool_tile_stairs": "Pool Tile Stairs",
   "block.fondest_memories.pool_tile_slab": "Pool Tile Slab",
+  "block.fondest_memories.pool_tile_wall": "Pool Tile Wall",
   "block.fondest_memories.sky_window": "High Noon Sky Window",
   "block.fondest_memories.sky_panel_noon": "High Noon Sky Panel",
   "block.fondest_memories.sky_panel_noon_lightless": "Lightless High Noon Sky Panel",
+  "block.fondest_memories.lockable_metal_door": "Lockable Metal Door",
+
+  "item.fondest_memories.master_key": "Master Key",
+  "item.fondest_memories.regular_key": "Key",
+
 
   "biome.fondest_memories.highway" : "Northern Highway",
   "biome.fondest_memories.pools" : "Pools",

@@ -1,6 +1,7 @@
 package net.erzekawek.fondestmemories.registry;
 
 import net.erzekawek.fondestmemories.FondestMemories;
+import net.erzekawek.fondestmemories.items.Key;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +16,10 @@ import java.util.function.Function;
 public class FondestMemoriesItemRegistry {
 
     public static Map<Item, ResourceKey<Item>> idLookup = new HashMap<>();
+
+    public static Item REGULAR_KEY = register("regular_key", settings -> new Key(settings, true), new Item.Properties().stacksTo(16));
+
+    public static Item MASTER_KEY = register("master_key", settings -> new Key(settings, false), new Item.Properties().stacksTo(16));
 
     public static Item register(String name) {
         return register(name, new Item.Properties());

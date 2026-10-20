@@ -37,8 +37,11 @@ public final class FondestMemoriesRoomRegistry {
                 .register();
     }
 
-    public static void registerHotel() {
+    public static void registerLightsOut() {
+        RoomGroup.builder(FondestMemories.id("lights_out"))
+                .guides(Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE)
 
+                .register();
     }
 
     public static Identifier findPool(String roomId) {

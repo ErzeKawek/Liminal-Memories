@@ -2,6 +2,7 @@ package net.erzekawek.fondestmemories.registry;
 
 import net.erzekawek.fondestmemories.FondestMemories;
 import net.erzekawek.fondestmemories.blocks.DimensionalRiftBlock;
+import net.erzekawek.fondestmemories.blocks.LockableDoorBlock;
 import net.erzekawek.fondestmemories.blocks.SkyPanelBlock;
 import net.erzekawek.fondestmemories.blocks.SkyWindowBlock;
 import net.minecraft.core.Registry;
@@ -9,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -16,6 +18,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -38,7 +41,11 @@ public class FondestMemoriesBlockRegistry {
     public static Block SKY_PANEL_NOON = registerPanel("sky_panel_noon", 15);
     public static Block SKY_PANEL_NOON_LIGHTLESS = registerPanel("sky_panel_noon_lightless", 0);
 
-    // rift blocks & util
+    // utility blocks
+
+    public static Block LOCKABLE_METAL_DOOR = registerKeyedDoor("lockable_metal_door");
+
+    // rift blocks
 
     public static Block POOL_RIFT = registerRift("poolrooms_rift", 15, FondestMemoriesDimensionRegistry.FRONTIERS, 60, 90, 60, 0f);
     public static Block HIGHWAY_RIFT = registerRift("highway_rift", 15, FondestMemoriesDimensionRegistry.ENDLESS_HIGHWAY, 5, 3, 0, 0f);
@@ -73,6 +80,15 @@ public class FondestMemoriesBlockRegistry {
                 .sound(SoundType.GLASS)
                 .lightLevel(blockState -> light)
                 .noLootTable()
+                .noOcclusion()
+                .setId(settings.blockId())));
+    }
+
+    private static Block registerKeyedDoor(String name) {
+        return register(name, settings -> new LockableDoorBlock(BlockBehaviour.Properties.of()
+                .strength(50, 1200)
+                .sound(SoundType.NETHERITE_BLOCK)
+                .pushReaction(PushReaction.IMMOVEABLE)
                 .noOcclusion()
                 .setId(settings.blockId())));
     }
