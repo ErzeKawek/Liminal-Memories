@@ -11,6 +11,7 @@ import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -39,27 +40,22 @@ public class FondestMemoriesBlockRegistry {
 
     // rift blocks & util
 
-    static int num1 = 5;
-    static int num2 = -5;
-    static Random rand = new Random();
-    static int randX = rand.nextBoolean() ? num1 : num2;
+    public static Block POOL_RIFT = registerRift("poolrooms_rift", 15, FondestMemoriesDimensionRegistry.FRONTIERS, 60, 90, 60, 0f);
+    public static Block HIGHWAY_RIFT = registerRift("highway_rift", 15, FondestMemoriesDimensionRegistry.ENDLESS_HIGHWAY, 5, 3, 0, 0f);
 
-    public static final Block POOL_RIFT = register("poolrooms_rift",
-            settings -> new DimensionalRiftBlock(BlockBehaviour.Properties.of()
-                    .noCollision()
-                    .strength(-1f)
-                    .lightLevel(bs -> 15)
-                    .setId(settings.blockId()),
-                    FondestMemoriesDimensionRegistry.FRONTIERS,
-                    new Vec3(60, 70, 60), 0f));
 
-    public static final Block HIGHWAY_RIFT = register("highway_rift",
-            settings -> new DimensionalRiftBlock(BlockBehaviour.Properties.of()
-                    .strength(-1f)
-                    .lightLevel(bs -> 15)
-                    .setId(settings.blockId()),
-                    FondestMemoriesDimensionRegistry.ENDLESS_HIGHWAY,
-                    new Vec3(randX, 3, 0), 0f));
+    private static Block registerRift(String name, int light, ResourceKey<Level> dim, int destX, int destY, int destZ, float yaw) {
+        return register(name, settings -> new DimensionalRiftBlock(
+                BlockBehaviour.Properties.of()
+                        .noCollision()
+                        .strength(-1f, 3600000)
+                        .lightLevel(blockState -> light)
+                        .noLootTable()
+                        .noOcclusion()
+                        .setId(settings.blockId()),
+                dim,
+                new Vec3(destX, destY, destZ), yaw));
+    }
 
     private static Block registerPanel(String name, int light) {
         return register(name, settings -> new SkyPanelBlock(BlockBehaviour.Properties.of()
