@@ -1,0 +1,22 @@
+{
+  "ambient_light": 0.0,
+  "attributes": {
+    "minecraft:visual/fog_color": "#000000",
+    "minecraft:visual/fog_start_distance": 0.0,
+    "minecraft:visual/fog_end_distance": 40.0,
+    "minecraft:visual/sky_fog_end_distance": 40.0,
+    "minecraft:visual/cloud_fog_end_distance": 40.0
+  },
+  "coordinate_scale": 1.0,
+  "default_clock": "fondest_memories:lights_out",
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_skylight": false,
+  "height": 384,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "logical_height": 384,
+  "min_y": -64,
+  "monster_spawn_light_level": 0,
+  "monster_spawn_block_light_limit": 0,
+  "timelines": "fondest_memories:nightlight"
+}

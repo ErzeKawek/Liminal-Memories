@@ -40,20 +40,29 @@ public final class FondestMemoriesRoomRegistry {
     public static void registerLightsOut() {
         RoomGroup.builder(FondestMemories.id("lights_out"))
                 .guides(Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE)
-                .single(findHalls("hall_i"), 0, 9)
-                .single(findHalls("hall_l"), 0, 9)
-                .single(findHalls("hall_f"), 0, 9)
-                .single(findHalls("hall_t"), 0, 9)
-                .single(findHalls("hall_dead"), 0, 9)
+                .single(findHalls("hall_i"), 0, 19)
+                .single(findHalls("hall_l"), 0, 19)
+                .single(findHalls("hall_f"), 0, 19)
+                .single(findHalls("hall_t"), 0, 19)
+                .single(findHalls("hall_dead"), 0, 19)
+                .single(findHalls("hall_i_door"), 0, 6)
                 .single(findHalls("hall_l_light"), 0, 1)
                 .single(findHalls("hall_f_light"), 0, 1)
                 .single(findHalls("hall_t_light"), 0, 1)
                 .single(findHalls("hall_dead_light"), 0, 1)
                 .single(findHalls("hall_i_lightdoor"), 0, 1)
 
-                .multi(findHalls("large_room_chair"), 3, 2, 0, 9)
+                .multi(findHalls("large_room_chair"), 3, 2, 0, 8)
+                .multi(findHalls("large_room_chair_intersect"), 3, 2, 0, 8)
+                .multi(findHalls("large_room_chair_chests"), 3, 2, 0, 8)
+                .multi(findHalls("large_room_chair_office"), 3, 2, 0, 8)
 
+                .multi(findHalls("large_room_chair_light"), 3, 2, 0, 1)
+                .multi(findHalls("large_room_chair_intersect_light"), 3, 2, 0, 1)
+                .multi(findHalls("large_room_chair_chests_light"), 3, 2, 0, 1)
+                .multi(findHalls("large_room_chair_office_light"), 3, 2, 0, 1)
 
+                .start(findHalls("start_hall"), 2, 2, 0)
                 .register();
     }
 

@@ -1,0 +1,17 @@
+{
+  "type": "fondest_memories:lights_out",
+  "generator": {
+    "type": "fondest_memories:maze",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "fondest_memories:pools"
+    },
+    "group": "fondest_memories:lights_out",
+    "cell_size": 6,
+    "region_size": 16,
+    "base_y": 64,
+    "seed": 2010,
+    "multi_room_chance": 0.1,
+    "gate_chance": 0.4
+  }
+}
