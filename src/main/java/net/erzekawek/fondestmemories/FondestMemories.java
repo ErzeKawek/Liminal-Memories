@@ -53,7 +53,7 @@ public class FondestMemories implements ModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(s -> { server = null; clearCaches(); });
 
         FondestMemoriesRoomRegistry.registerPoolrooms();
-        // FondestMemoriesRoomRegistry.registerHotel();
+        FondestMemoriesRoomRegistry.registerLightsOut();
         FondestMemoriesBlockRegistry.initialize();
         FondestMemoriesItemRegistry.initialize();
         FondestMemoriesItemGroup.initialize();
