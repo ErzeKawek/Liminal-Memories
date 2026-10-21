@@ -4,7 +4,7 @@
     "type": "fondest_memories:maze",
     "biome_source": {
       "type": "minecraft:fixed",
-      "biome": "fondest_memories:pools"
+      "biome": "fondest_memories:outed_lights"
     },
     "group": "fondest_memories:lights_out",
     "cell_size": 6,
