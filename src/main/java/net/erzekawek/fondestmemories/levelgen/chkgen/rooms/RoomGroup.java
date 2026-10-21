@@ -31,7 +31,9 @@ public final class RoomGroup {
     }
 
     public static RoomGroup get(Identifier id) { return REGISTRY.get(id); }
-    public static void clearRuntimes() { REGISTRY.values().forEach(g -> g.runtimes.clear()); }
+    public static void clearRuntimes() {
+        REGISTRY.values().forEach(g -> g.runtimes.clear());
+    }
 
     public GroupRuntime runtime(int cellSize) {
         return runtimes.computeIfAbsent(cellSize, cs -> new GroupRuntime(this, cs));

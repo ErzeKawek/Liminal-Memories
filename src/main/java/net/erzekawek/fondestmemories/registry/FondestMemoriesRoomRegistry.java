@@ -40,11 +40,24 @@ public final class FondestMemoriesRoomRegistry {
     public static void registerLightsOut() {
         RoomGroup.builder(FondestMemories.id("lights_out"))
                 .guides(Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE)
+                .single(findHalls("hall_i"), 0, 9)
+                .single(findHalls("hall_l"), 0, 9)
+                .single(findHalls("hall_f"), 0, 9)
+                .single(findHalls("hall_t"), 0, 9)
+                .single(findHalls("hall_dead"), 0, 9)
+                .single(findHalls("hall_l_light"), 0, 1)
+                .single(findHalls("hall_f_light"), 0, 1)
+                .single(findHalls("hall_t_light"), 0, 1)
+                .single(findHalls("hall_dead_light"), 0, 1)
+                .single(findHalls("hall_i_lightdoor"), 0, 1)
+
+                .multi(findHalls("large_room_chair"), 3, 2, 0, 9)
+
 
                 .register();
     }
 
-    public static Identifier findPool(String roomId) {
-        return FondestMemories.findRoom("pools", roomId);
+    public static Identifier findHalls(String roomId) {
+        return FondestMemories.findRoom("lights_out", roomId);
     }
 }
