@@ -83,32 +83,6 @@
           "chance": 0.1
         }
       ]
-    },
-    {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 5,
-        "max": 8
-      },
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:birch_boat",
-          "weight": 1,
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance",
-              "chance": 0.05
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:limit_count",
-              "limit": 1
-            }
-          ]
-        }
-      ]
     }
   ]
 }
