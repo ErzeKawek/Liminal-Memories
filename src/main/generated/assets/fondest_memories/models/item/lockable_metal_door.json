@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fondest_memories:item/lockable_metal_door"
+  }
+}
