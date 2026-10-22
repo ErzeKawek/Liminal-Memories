@@ -25,6 +25,7 @@ public class ModelProv extends FabricModelProvider {
         blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.POOL_TILING);
         blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.HIGHWAY_RIFT);
         blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.POOL_RIFT);
+        blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.LIGHTS_OUT_RIFT);
 
         blockModelGenerator.createDoor(FondestMemoriesBlockRegistry.LOCKABLE_METAL_DOOR);
 

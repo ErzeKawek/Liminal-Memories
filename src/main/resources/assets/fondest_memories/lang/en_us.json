@@ -11,13 +11,18 @@
   "block.fondest_memories.sky_panel_noon_lightless": "Lightless High Noon Sky Panel",
   "block.fondest_memories.lockable_metal_door": "Lockable Metal Door",
 
+  "block.fondest_memories.poolrooms_rift": "Poolrooms Rift",
+  "block.fondest_memories.highway_rift": "Highway Rift",
+  "block.fondest_memories.lights_out_rift": "Lights Out Rift",
+
   "item.fondest_memories.master_key": "Master Key",
   "item.fondest_memories.regular_key": "Key",
 
-
   "biome.fondest_memories.highway" : "Northern Highway",
   "biome.fondest_memories.pools" : "Pools",
+  "biome.fondest_memories.outed_lights" : "Outage",
 
   "dimension.fondest_memories.endless_higway" : "Highway of Despair",
-  "dimension.fondest_memories.frontiers" : "Frontiers"
+  "dimension.fondest_memories.frontiers" : "Frontiers",
+  "dimension.fondest_memories.lights_out" : "Lights Out"
 }

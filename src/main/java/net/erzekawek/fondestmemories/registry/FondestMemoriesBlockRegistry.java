@@ -49,6 +49,7 @@ public class FondestMemoriesBlockRegistry {
 
     public static Block POOL_RIFT = registerRift("poolrooms_rift", 15, FondestMemoriesDimensionRegistry.FRONTIERS, 60, 90, 60, 0f);
     public static Block HIGHWAY_RIFT = registerRift("highway_rift", 15, FondestMemoriesDimensionRegistry.ENDLESS_HIGHWAY, 5, 3, 0, 0f);
+    public static Block LIGHTS_OUT_RIFT = registerRift("lights_out_rift", 0, FondestMemoriesDimensionRegistry.FRONTIERS, (int) 47.5, 75, (int) 47.5, 0f);
 
 
     private static Block registerRift(String name, int light, ResourceKey<Level> dim, int destX, int destY, int destZ, float yaw) {
