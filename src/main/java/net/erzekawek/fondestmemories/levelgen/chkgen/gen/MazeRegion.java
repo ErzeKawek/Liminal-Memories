@@ -14,18 +14,23 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * One region = regionSize x regionSize cells, generated deterministically from (seed, regionX, regionZ).
- * Inside a region the maze is carved with an iterative Depth-First (recursive backtracker) algorithm.
- * Regions are stitched together by "gates" on the border ring whose open/closed state is a pure
- * function of the two cells involved, so neighbouring regions always agree -> endless maze.
+ * One region = regionSize x regionSize cells of ONE story, generated deterministically from
+ * (seed, regionX, regionZ) with an iterative Depth-First search (recursive backtracker).
+ * Regions are stitched by deterministic border "gates" so the maze continues forever.
  */
 public final class MazeRegion {
     private static final Map<Key, MazeRegion> CACHE = new ConcurrentHashMap<>();
     private record Key(MazeSettings s, int rx, int rz) {}
 
+    /** single story entry point. */
     public static MazeRegion get(MazeSettings s, int rx, int rz) {
         if (CACHE.size() > 512) CACHE.clear();
-        return CACHE.computeIfAbsent(new Key(s, rx, rz), k -> new MazeRegion(s, rx, rz).build());
+        return CACHE.computeIfAbsent(new Key(s, rx, rz), k -> {
+            Occupancy occ = new Occupancy(s.regionSize(), rx, rz, s.cellSize());
+            RoomGroup g = RoomGroup.get(s.group());
+            if (g != null) placeStart(s, g.runtime(s.cellSize()), rx, rz, occ);
+            return build(s, rx, rz, occ);
+        });
     }
     public static void clearCache() { CACHE.clear(); }
 
@@ -34,55 +39,70 @@ public final class MazeRegion {
         public final LoadedRoom room; public final int rot, lx, lz, w, d, index;
         public final List<Port> ports; // region-local
         public final int blockX, blockY, blockZ;
+        public final Object pasteId;
         Placement(LoadedRoom room, int rot, int lx, int lz, int index, List<Port> ports,
-                  int blockX, int blockY, int blockZ) {
+                  int blockX, int blockY, int blockZ, Object pasteId) {
             this.room = room; this.rot = rot; this.lx = lx; this.lz = lz; this.index = index; this.ports = ports;
             this.w = room.footW(rot); this.d = room.footD(rot);
             this.blockX = blockX; this.blockY = blockY; this.blockZ = blockZ;
+            this.pasteId = pasteId == null ? this : pasteId;
         }
+    }
+
+    /** Places the start room (region 0,0 only), centred. */
+    static void placeStart(MazeSettings s, GroupRuntime rt, int rx, int rz, Occupancy occ) {
+        if (rx != 0 || rz != 0 || rt == null || rt.start == null) return;
+        LoadedRoom st = rt.start;
+        int lx = (occ.n - st.cellsW) / 2, lz = (occ.n - st.cellsD) / 2;
+        List<Port> ports = st.portsRotated(0, 0);
+        if (!occ.fits(st.cellsW, st.cellsD, lx, lz, ports)) {
+            FondestMemories.LOGGER.error("[Fondest Memories] ts start {} doesn't fit brotha; pls raise region size", s.group());
+            return;
+        }
+        occ.place(st, 0, lx, lz, ports, s.baseY() + st.def.yOffset(), null);
+    }
+
+    static MazeRegion build(MazeSettings s, int rx, int rz, Occupancy occ) {
+        return new MazeRegion(s, rx, rz, occ).generate();
     }
 
     private final MazeSettings s;
     private final int rx, rz, n, cs;
+    private final Occupancy occ;
     private final Placement[] cells;
-    private final boolean[] reserved;
-    private final List<Placement> rooms = new ArrayList<>();
-    private RandomSource rng;
-    private GroupRuntime rt;
+    private final List<Placement> rooms;
 
-    private MazeRegion(MazeSettings s, int rx, int rz) {
+    private MazeRegion(MazeSettings s, int rx, int rz, Occupancy occ) {
         this.s = s; this.rx = rx; this.rz = rz; this.n = s.regionSize(); this.cs = s.cellSize();
-        this.cells = new Placement[n * n]; this.reserved = new boolean[n * n];
+        this.occ = occ; this.cells = occ.cells; this.rooms = occ.rooms;
     }
 
     /** Placement covering a region-local cell, or null (= empty cell). */
     public Placement at(int lx, int lz) { return cells[lz * n + lx]; }
 
-    private MazeRegion build() {
+    private MazeRegion generate() {
         RoomGroup group = RoomGroup.get(s.group());
         if (group == null) {
             FondestMemories.LOGGER.error("[Fondest Memories] unknown room group {}", s.group()); return this;
         }
-        rt = group.runtime(cs);
-        rng = RandomSource.create(mix(s.seed(), rx, rz, 7));
+        GroupRuntime rt = group.runtime(cs);
+        RandomSource rng = RandomSource.create(mix(s.seed(), rx, rz, 7));
 
-        // start room
-        if (rx == 0 && rz == 0 && rt.start != null) {
-            int lx = (n - rt.start.cellsW) / 2, lz = (n - rt.start.cellsD) / 2;
-            if (!tryPlace(rt.start, 0, lx, lz)) FondestMemories.LOGGER.error("[Fondest Memories] start room doesn't fit/ports blocked; raise region_size");
-        }
-
-        // 2) rand multi
+        // random multi
         if (!rt.multis.isEmpty()) {
             for (int lz = 1; lz < n - 1; lz++)
                 for (int lx = 1; lx < n - 1; lx++) {
                     if (rng.nextFloat() >= s.multiRoomChance()) continue;
                     LoadedRoom lr = rt.pickMulti(rng);
-                    if (lr != null) tryPlace(lr, rng.nextInt(4), lx, lz);
+                    if (lr == null) continue;
+                    int rot = rng.nextInt(4);
+                    List<Port> ports = lr.portsRotated(rot, 0);
+                    if (occ.fits(lr.footW(rot), lr.footD(rot), lx, lz, ports))
+                        occ.place(lr, rot, lx, lz, ports, s.baseY() + lr.def.yOffset(), null);
                 }
         }
 
-        // 3) depth frist
+        // dfs
         int[] mask = new int[n * n];
         boolean[] vis = new boolean[n * n + rooms.size()];
         List<Integer> ring = new ArrayList<>();
@@ -97,8 +117,10 @@ public final class MazeRegion {
         while (!stack.isEmpty()) {
             int node = stack.peek();
             exits(node, exits);
-            exits.removeIf(e -> vis[nodeOf(e[2])]); // to make branch only to empty cells
-            if (exits.isEmpty()) { stack.pop(); continue; }
+            exits.removeIf(e -> vis[nodeOf(e[2])]);
+            if (exits.isEmpty()) {
+                stack.pop(); continue;
+            }
             int[] e = exits.get(rng.nextInt(exits.size()));
             Side side = Side.VALUES[e[1]];
             if (cells[e[0]] == null) mask[e[0]] |= side.bit;
@@ -135,40 +157,19 @@ public final class MazeRegion {
             if (cells[i] != null || mask[i] == 0 || !vis[i]) continue;
             GroupRuntime.Candidate c = rt.pickSingle(mask[i], rng);
             if (c == null) {
-                FondestMemories.LOGGER.warn("[Fondest Memories] no 1x1 piece with openings mask {}, leaving cell empty", mask[i]); continue;
+                FondestMemories.LOGGER.warn("[Fondest Memories] no 1x1 piece with openings mask {} in {}, leaving cell empty", mask[i], s.group()); continue;
             }
             int lx = i % n, lz = i / n;
             cells[i] = new Placement(c.room(), c.rot(), lx, lz, -1, List.of(),
-                    (rx * n + lx) * cs, s.baseY() + c.room().def.yOffset(), (rz * n + lz) * cs);
+                    (rx * n + lx) * cs, s.baseY() + c.room().def.yOffset(), (rz * n + lz) * cs, null);
         }
         return this;
     }
 
-    private boolean tryPlace(LoadedRoom lr, int rot, int lx, int lz) {
-        int w = lr.footW(rot), d = lr.footD(rot);
-        if (lx < 1 || lz < 1 || lx + w > n - 1 || lz + d > n - 1) return false;
-        for (int z = lz; z < lz + d; z++)
-            for (int x = lx; x < lx + w; x++) { int i = z * n + x; if (cells[i] != null || reserved[i]) return false; }
-
-        List<Port> local = new ArrayList<>();
-        for (Port p : lr.portsRotated(rot)) {
-            Port g = new Port(lx + p.cx(), lz + p.cz(), p.side());
-            int nx = g.cx() + g.side().dx, nz = g.cz() + g.side().dz;
-            if (nx < 0 || nz < 0 || nx >= n || nz >= n || cells[nz * n + nx] != null) return false;
-            local.add(g);
-        }
-        Placement pl = new Placement(lr, rot, lx, lz, rooms.size(), List.copyOf(local),
-                (rx * n + lx) * cs, s.baseY() + lr.def.yOffset(), (rz * n + lz) * cs);
-        rooms.add(pl);
-        for (int z = lz; z < lz + d; z++) for (int x = lx; x < lx + w; x++) cells[z * n + x] = pl;
-        for (Port p : local) reserved[(p.cz() + p.side().dz) * n + p.cx() + p.side().dx] = true;
-        return true;
+    private int nodeOf(int idx) {
+        Placement p = cells[idx]; return p == null ? idx : n * n + p.index;
     }
 
-    /** cell nodes */
-    private int nodeOf(int idx) { Placement p = cells[idx]; return p == null ? idx : n * n + p.index; }
-
-    /** Room exit rule */
     private void exits(int node, List<int[]> out) {
         out.clear();
         if (node < n * n) {
@@ -183,9 +184,11 @@ public final class MazeRegion {
         if (nx < 0 || nz < 0 || nx >= n || nz >= n) return;
         int to = nz * n + nx;
         Placement tp = cells[to];
-        if (tp != null) {                                  // target is a room: it must have a port facing us
+        if (tp != null) {
             boolean ok = false;
-            for (Port p : tp.ports) if (p.cx() == nx && p.cz() == nz && p.side() == sd.opposite()) { ok = true; break; }
+            for (Port p : tp.ports) if (p.cx() == nx && p.cz() == nz && p.side() == sd.opposite()) {
+                ok = true; break;
+            }
             if (!ok) return;
         }
         out.add(new int[]{from, sd.ordinal(), to});

@@ -60,10 +60,7 @@ public final class MazeChunkGenerator extends ChunkGenerator {
     protected MapCodec<? extends ChunkGenerator> codec() { return CODEC; }
 
     @Override
-    public CompletableFuture<ChunkAccess> buildTerrain(ChunkAccess chunk, Blender blender, RandomState randomState,
-                                                       StructureManager structureManager, BiomeManager biomeManager,
-                                                       @Nullable WorldGenRegion carverBiomeRegion,
-                                                       Set<Holder<Biome>> possibleBiomes) {
+    public CompletableFuture<ChunkAccess> buildTerrain(ChunkAccess chunk, Blender blender, RandomState randomState, StructureManager structureManager, BiomeManager biomeManager, @Nullable WorldGenRegion carverBiomeRegion, Set<Holder<Biome>> possibleBiomes) {
         generateMaze(chunk);
         return CompletableFuture.completedFuture(chunk);
     }
@@ -105,7 +102,7 @@ public final class MazeChunkGenerator extends ChunkGenerator {
                 t.putInt("x", x); t.putInt("y", y); t.putInt("z", z);
                 chunk.setBlockEntityNbt(t);
             } else if (state.getBlock() instanceof EntityBlock eb) {
-                // block has an entity but the NBT stored none: create a fresh one
+                // block has an entity but the NBT stored none create fresh ne
                 BlockEntity be = eb.newBlockEntity(bp.immutable(), state);
                 if (be != null) chunk.setBlockEntity(be);
             }
@@ -114,9 +111,15 @@ public final class MazeChunkGenerator extends ChunkGenerator {
 
     @Override public void spawnOriginalMobs(WorldGenRegion region) {}
 
-    @Override public int getGenDepth() { return 384; }
-    @Override public int getSeaLevel() { return -63; }
-    @Override public int getMinY() { return 0; }
+    @Override public int getGenDepth() {
+        return 384;
+    }
+    @Override public int getSeaLevel() {
+        return -63;
+    }
+    @Override public int getMinY() {
+        return 0;
+    }
 
     @Override
     public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState randomState) {
