@@ -1,7 +1,7 @@
 package net.erzekawek.fondestmemories.registry;
 
 import net.erzekawek.fondestmemories.FondestMemories;
-import net.erzekawek.fondestmemories.levelgen.chkgen.rooms.RoomGroup;
+import net.erzekawek.veyl.levelgen.chunkgen.rooms.RoomGroup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 
@@ -9,7 +9,8 @@ import net.minecraft.world.level.block.Blocks;
  * basically where all the rooms are registered
  */
 public final class FondestMemoriesRoomRegistry {
-    private FondestMemoriesRoomRegistry() {}
+    private FondestMemoriesRoomRegistry() {
+    }
 
     public static void registerPoolrooms() {
         RoomGroup.builder(FondestMemories.id("poolrooms"))
@@ -24,9 +25,9 @@ public final class FondestMemoriesRoomRegistry {
                 .single(FondestMemories.id("pools/pool_8x8_deadendtall"), -8, 2)
 
                 // dis are big rooms
-                .multi(FondestMemories.id("pools/pool_8x16_small"),   1, 2, 0, 3)
-                .multi(FondestMemories.id("pools/pool_8x16_tallhall"),   1, 2, 0, 3)
-                .multi(FondestMemories.id("pools/pool_16x24_skyview"), 2, 3, 0, 2)
+                .multi(FondestMemories.id("pools/pool_8x16_small"), 1, 2, 0, 3)
+                .multi(FondestMemories.id("pools/pool_8x16_tallhall"), 1, 2, 0, 3)
+                .multi(FondestMemories.id("pools/pool_16x24_skyview"),2, 3, 0, 2)
                 .multi(FondestMemories.id("pools/pool_24x24_lush"), 3, 3, 0, 1)
                 .multi(FondestMemories.id("pools/pool_24x32_arches"), 3, 4, 0, 1)
                 .multi(FondestMemories.id("pools/pool_24x32_archwalkway"), 3, 4, 0, 1)

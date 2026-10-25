@@ -63,7 +63,7 @@ public class SkyPanelBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    protected RenderShape getRenderShape(BlockState state)   {
         return RenderShape.INVISIBLE;
     }
 

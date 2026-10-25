@@ -1,9 +1,10 @@
 {
   "type": "fondest_memories:frontiers",
   "generator": {
-    "type": "fondest_memories:maze",
+    "type": "veyl:maze",
     "biome_source": {
-      "type": "minecraft:fixed", "biome": "fondest_memories:pools"
+      "type": "minecraft:fixed",
+      "biome": "fondest_memories:pools"
     },
     "group": "fondest_memories:poolrooms",
     "cell_size": 8,
