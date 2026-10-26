@@ -1,19 +1,8 @@
 package net.erzekawek.fondestmemories.registry;
 
-import net.erzekawek.fondestmemories.FondestMemories;
-import net.erzekawek.fondestmemories.blocks.DimensionalRiftBlock;
-import net.erzekawek.fondestmemories.blocks.LockableDoorBlock;
-import net.erzekawek.fondestmemories.blocks.SkyPanelBlock;
-import net.erzekawek.fondestmemories.blocks.SkyWindowBlock;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.references.BlockItemId;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
+import net.erzekawek.fondestmemories.blocks.*;
+import net.erzekawek.veyl.utils.registry.CBlock;
+import net.erzekawek.veyl.utils.registry.UnifiedRegistry;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -27,12 +16,14 @@ import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static net.erzekawek.fondestmemories.FondestMemories.MOD_ID;
+
 public class FondestMemoriesBlockRegistry {
 
     // liminal unbreakable blocks
-    public static Block REAL_GATE = registerLimBlock("real_gate", 15);
-    public static Block FALSE_GATE = registerLimBlock("false_gate", 15);
-    public static Block POOL_TILING = registerLimBlock("pool_tiling", 0);
+    public static Block REAL_GATE = CBlock.makeUnbreakable(MOD_ID, "real_gate", 15);
+    public static Block FALSE_GATE = CBlock.makeUnbreakable(MOD_ID, "false_gate", 15);
+    public static Block POOL_TILING = CBlock.makeUnbreakable(MOD_ID, "pool_tiling", 0);
 
     // poolrooms blocks
     public static final Tiles POOL_TILE = new Tiles("pool_tile", MapColor.TERRACOTTA_WHITE);
@@ -47,26 +38,15 @@ public class FondestMemoriesBlockRegistry {
 
     // rift blocks
 
-    public static Block POOL_RIFT = registerRift("poolrooms_rift", 15, FondestMemoriesDimensionRegistry.FRONTIERS, 60, 90, 60, 0f);
-    public static Block HIGHWAY_RIFT = registerRift("highway_rift", 15, FondestMemoriesDimensionRegistry.ENDLESS_HIGHWAY, 5, 3, 0, 0f);
-    public static Block LIGHTS_OUT_RIFT = registerRift("lights_out_rift", 0, FondestMemoriesDimensionRegistry.LIGHTS_OUT, (int) 47.5, 75, (int) 47.5, 0f);
+    public static Block POOL_RIFT = CBlock.makeRift(MOD_ID, "poolrooms_rift", 15, FondestMemoriesDimensionRegistry.FRONTIERS, 60, 90, 60, 0f);
+    public static Block HIGHWAY_RIFT = CBlock.makeRift(MOD_ID, "highway_rift", 15, FondestMemoriesDimensionRegistry.ENDLESS_HIGHWAY, 5, 3, 0, 0f);
+    public static Block LIGHTS_OUT_RIFT = CBlock.makeRift(MOD_ID, "lights_out_rift", 0, FondestMemoriesDimensionRegistry.LIGHTS_OUT, (int) 47.5, 75, (int) 47.5, 0f);
+    public static Block LIMINAL_GLASS = CBlock.makeLight(MOD_ID, "liminal_glass", 15);
 
-
-    private static Block registerRift(String name, int light, ResourceKey<Level> dim, int destX, int destY, int destZ, float yaw) {
-        return register(name, settings -> new DimensionalRiftBlock(
-                BlockBehaviour.Properties.of()
-                        .noCollision()
-                        .strength(-1f, 3600000)
-                        .lightLevel(blockState -> light)
-                        .noLootTable()
-                        .noOcclusion()
-                        .setId(settings.blockId()),
-                dim,
-                new Vec3(destX, destY, destZ), yaw));
-    }
+    public static Block CORN_PLANT = CBlock.makeDoublePlant(MOD_ID,"corn_stalk", FondestMemoriesTagsRegistry.CORN_PLACEABLE_ON);
 
     private static Block registerPanel(String name, int light) {
-        return register(name, settings -> new SkyPanelBlock(BlockBehaviour.Properties.of()
+        return UnifiedRegistry.registerBlock(MOD_ID, name, settings -> new SkyPanelBlock(BlockBehaviour.Properties.of()
                 .strength(-1, 3600000)
                 .sound(SoundType.GLASS)
                 .lightLevel(blockState -> light)
@@ -76,7 +56,7 @@ public class FondestMemoriesBlockRegistry {
     }
 
     private static Block registerWindow(String name, int light) {
-        return register(name, settings -> new SkyWindowBlock(BlockBehaviour.Properties.of()
+        return UnifiedRegistry.registerBlock(MOD_ID, name, settings -> new SkyWindowBlock(BlockBehaviour.Properties.of()
                 .strength(-1, 3600000)
                 .sound(SoundType.GLASS)
                 .lightLevel(blockState -> light)
@@ -86,20 +66,10 @@ public class FondestMemoriesBlockRegistry {
     }
 
     private static Block registerKeyedDoor(String name) {
-        return register(name, settings -> new LockableDoorBlock(BlockBehaviour.Properties.of()
+        return UnifiedRegistry.registerBlock(MOD_ID, name, settings -> new LockableDoorBlock(BlockBehaviour.Properties.of()
                 .strength(50, 1200)
                 .sound(SoundType.NETHERITE_BLOCK)
                 .pushReaction(PushReaction.IMMOVEABLE)
-                .noOcclusion()
-                .setId(settings.blockId())));
-    }
-
-    private static Block registerLimBlock(String name, int light) {
-        return register(name, settings -> new Block(BlockBehaviour.Properties.of()
-                .strength(-1, 3600000)
-                .sound(SoundType.GLASS)
-                .lightLevel(blockState -> light)
-                .noLootTable()
                 .noOcclusion()
                 .setId(settings.blockId())));
     }
@@ -119,12 +89,12 @@ public class FondestMemoriesBlockRegistry {
             this.baseName = name;
             this.mapColor = mapColor;
 
-            tiles = FondestMemoriesBlockRegistry.register(baseName, settings -> new Block(applySettings(settings)));
-            tileStairs = FondestMemoriesBlockRegistry.register(baseName + "_stairs",
+            tiles = UnifiedRegistry.registerBlock(MOD_ID, baseName, settings -> new Block(applySettings(settings)));
+            tileStairs = UnifiedRegistry.registerBlock(MOD_ID, baseName + "_stairs",
                     settings -> new StairBlock(tiles.defaultBlockState(), applySettings(settings)));
-            tileSlab = FondestMemoriesBlockRegistry.register(baseName + "_slab",
+            tileSlab = UnifiedRegistry.registerBlock(MOD_ID, baseName + "_slab",
                     settings -> new SlabBlock(applySettings(settings)));
-            tileWall = FondestMemoriesBlockRegistry.register(baseName + "_wall",
+            tileWall = UnifiedRegistry.registerBlock(MOD_ID, baseName + "_wall",
                     settings -> new WallBlock(applySettings(settings)));
 
             blocks = Arrays.asList(tiles, tileStairs, tileSlab, tileWall);
@@ -138,60 +108,6 @@ public class FondestMemoriesBlockRegistry {
                     .noLootTable()
                     .mapColor(this.mapColor);
         }
-    }
-
-    public static Block register(String name, Function<BlockBehaviour.Properties, Block> factory) {
-        return register(name, factory, true);
-    }
-
-    public static Block register(String name, Function<BlockBehaviour.Properties, Block> factory, boolean hasItem) {
-        return register(name, factory, BlockBehaviour.Properties.of(), hasItem);
-    }
-
-    private static Block register(
-            String name,
-            Function<BlockBehaviour.Properties, Block> factory,
-            BlockBehaviour.Properties settings,
-            boolean hasItem
-    ) {
-        if (hasItem) {
-            BlockItemId id = BlockItemId.create(FondestMemories.id(name), FondestMemories.id(name));
-            Block block = factory.apply(settings.setId(id.block()));
-            FondestMemoriesItemRegistry.register(
-                    id.item(),
-                    new BlockItem(
-                            block,
-                            new Item.Properties()
-                                    .setId(id.item())
-                                    .useBlockDescriptionPrefix()
-                                    .requiredFeatures(block.requiredFeatures())
-                    )
-            );
-            return Registry.register(BuiltInRegistries.BLOCK, id.block(), block);
-        }
-        ResourceKey<Block> id = ResourceKey.create(Registries.BLOCK, FondestMemories.id(name));
-        Block block = factory.apply(settings.setId(id));
-        return Registry.register(BuiltInRegistries.BLOCK, id, block);
-    }
-
-    public static Block registerSpecialBlockItem(
-            String name,
-            Function<BlockBehaviour.Properties, Block> factory,
-            BiFunction<Block, BlockItemId, BlockItem> itemFactory
-    ) {
-        return registerSpecialBlockItem(name, name, factory, itemFactory);
-    }
-
-    public static Block registerSpecialBlockItem(
-            String blockName,
-            String itemName,
-            Function<BlockBehaviour.Properties, Block> factory,
-            BiFunction<Block, BlockItemId, BlockItem> itemFactory
-    ) {
-        BlockItemId id = BlockItemId.create(FondestMemories.id(blockName), FondestMemories.id(itemName));
-        Block block = factory.apply(BlockBehaviour.Properties.of().setId(id.block()));
-        FondestMemoriesItemRegistry.register(id.item(), itemFactory.apply(block, id));
-        return Registry.register(BuiltInRegistries.BLOCK, id.block(), block);
     }
 
     public static void initialize() {

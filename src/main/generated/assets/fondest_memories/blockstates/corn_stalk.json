@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "fondest_memories:block/corn_stalk_bottom"
+    },
+    "half=upper": {
+      "model": "fondest_memories:block/corn_stalk_top"
+    }
+  }
+}

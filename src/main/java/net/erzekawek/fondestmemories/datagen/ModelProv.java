@@ -29,6 +29,11 @@ public class ModelProv extends FabricModelProvider {
 
         blockModelGenerator.createDoor(FondestMemoriesBlockRegistry.LOCKABLE_METAL_DOOR);
 
+        blockModelGenerator.createTrivialCube(FondestMemoriesBlockRegistry.LIMINAL_GLASS);
+
+        blockModelGenerator.createDoublePlant(FondestMemoriesBlockRegistry.CORN_PLANT,
+                BlockModelGenerators.PlantType.NOT_TINTED);
+
         generateTileModels(blockModelGenerator, FondestMemoriesBlockRegistry.POOL_TILE);
     }
 
@@ -42,7 +47,8 @@ public class ModelProv extends FabricModelProvider {
     public void generateItemModels(ItemModelGenerators itemModelGenerator) {
         for (Item item : Arrays.asList(
                 FondestMemoriesItemRegistry.MASTER_KEY,
-                FondestMemoriesItemRegistry.REGULAR_KEY
+                FondestMemoriesItemRegistry.REGULAR_KEY,
+                FondestMemoriesBlockRegistry.CORN_PLANT.asItem()
         )) {
             itemModelGenerator.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
         }

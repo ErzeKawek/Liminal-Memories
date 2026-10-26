@@ -1,11 +1,5 @@
 package net.erzekawek.fondestmemories;
-
-import net.erzekawek.fondestmemories.levelgen.chkgen.gen.MazeChunkGenerator;
-import net.erzekawek.fondestmemories.levelgen.chkgen.gen.MazeRegion;
-import net.erzekawek.fondestmemories.levelgen.chkgen.gen.MultiStoryChunkGenerator;
-import net.erzekawek.fondestmemories.levelgen.chkgen.gen.MultiStoryRegion;
 import net.erzekawek.fondestmemories.registry.FondestMemoriesRoomRegistry;
-import net.erzekawek.fondestmemories.levelgen.chkgen.rooms.RoomGroup;
 import net.erzekawek.fondestmemories.levelgen.endlesshighway.RoadGenerator;
 import net.erzekawek.fondestmemories.registry.*;
 import net.fabricmc.api.ModInitializer;
@@ -31,10 +25,6 @@ public class FondestMemories implements ModInitializer {
         return Identifier.fromNamespaceAndPath(MOD_ID, name);
     }
 
-    public static Identifier findRoom(String space, String name) {
-        return id(space + "/" + name);
-    }
-
     private static volatile MinecraftServer server;
     public static MinecraftServer server() {
         return server;
@@ -48,14 +38,6 @@ public class FondestMemories implements ModInitializer {
             if (level != null) generator.tick(level);
         });
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> generator.reset());
-        Registry.register(BuiltInRegistries.CHUNK_GENERATOR, id("maze"), MazeChunkGenerator.CODEC);
-        Registry.register(BuiltInRegistries.CHUNK_GENERATOR, id("multistory"), MultiStoryChunkGenerator.CODEC);
-
-        ServerLifecycleEvents.SERVER_STARTING.register(s -> server = s);
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((s, rm, ok) -> clearCaches());
-        ServerLifecycleEvents.SERVER_STOPPED.register(s -> {
-            server = null; clearCaches();
-        });
 
         FondestMemoriesRoomRegistry.registerPoolrooms();
         FondestMemoriesRoomRegistry.registerLightsOut();
@@ -63,11 +45,5 @@ public class FondestMemories implements ModInitializer {
         FondestMemoriesItemRegistry.initialize();
         FondestMemoriesItemGroup.initialize();
         FondestMemoriesBlockEntityRegistry.initialize();
-    }
-
-    private static void clearCaches() {
-        RoomGroup.clearRuntimes();
-        MazeRegion.clearCache();
-        MultiStoryRegion.clearCache();
     }
 }

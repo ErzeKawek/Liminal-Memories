@@ -1,9 +1,12 @@
 package net.erzekawek.fondestmemories.registry;
 
 import net.erzekawek.fondestmemories.FondestMemories;
-import net.erzekawek.fondestmemories.levelgen.chkgen.rooms.RoomGroup;
+import net.erzekawek.veyl.levelgen.chunkgen.rooms.RoomGroup;
+import net.erzekawek.veyl.utils.finder.Find;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
+
+import static net.erzekawek.fondestmemories.FondestMemories.MOD_ID;
 
 /**
  * basically where all the rooms are registered
@@ -67,6 +70,6 @@ public final class FondestMemoriesRoomRegistry {
     }
 
     public static Identifier findHalls(String roomId) {
-        return FondestMemories.findRoom("lights_out", roomId);
+        return Find.findNBT(MOD_ID,"lights_out", roomId);
     }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "fondest_memories:block/corn_stalk_top"
+  }
+}

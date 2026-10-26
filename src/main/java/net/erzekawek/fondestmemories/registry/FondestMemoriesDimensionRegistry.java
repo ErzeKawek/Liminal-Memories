@@ -14,4 +14,9 @@ public class FondestMemoriesDimensionRegistry {
 
     public static final ResourceKey<Level> FRONTIERS = ResourceKey.create(
             Registries.DIMENSION, FondestMemories.id("frontiers"));
+
+    public static final ResourceKey<Level> BARNFIELDS = ResourceKey.create(
+            Registries.DIMENSION, FondestMemories.id("barnfields"));
+
+
 }

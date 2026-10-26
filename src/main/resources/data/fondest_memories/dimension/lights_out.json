@@ -1,7 +1,7 @@
 {
   "type": "fondest_memories:lights_out",
   "generator": {
-    "type": "fondest_memories:maze",
+    "type": "veyl:maze",
     "biome_source": {
       "type": "minecraft:fixed",
       "biome": "fondest_memories:outed_lights"
